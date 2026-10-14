@@ -25,6 +25,7 @@ button.g{background:var(--ac2);color:var(--ac)}button:disabled{opacity:.4}
 table{width:100%;border-collapse:collapse;font-size:.9rem}th,td{text-align:left;padding:8px;border-bottom:1px solid var(--bd)}
 .tw{overflow-x:auto}.hide{display:none}.err{color:var(--no);font-size:.9rem}
 </style></head><body><div class="w" id="app"></div>
+<footer class="m" style="text-align:center;padding:4px 16px 24px">© 2026 · Built by <a href="https://www.linkedin.com/in/honajibola/" target="_blank" rel="noopener noreferrer"><b>Ajibola Idowu-Praise [HON. AJIBOLA]</b></a> · <a href="https://wa.me/2349050704741" target="_blank" rel="noopener noreferrer">Contact him here</a></footer>
 <script src="questions.js"></script>
 <script>
 const Q=(RAW+"\n"+NEW).split("\n").map(l=>{const p=l.split("|");return{q:p[0],o:p.slice(1,5),a:"ABCD".indexOf(p[5])}});
@@ -65,6 +66,6 @@ r.forEach((x,i)=>{const tr=tb.insertRow();[i+1,x.name,x.matric,x.score+"/"+x.tot
 $("st").textContent=r.length+" attempt(s)"+(r.length?" · average "+(r.reduce((s,x)=>s+x.score,0)/r.length).toFixed(1)+"/"+N:"")};
 $("sr").oninput=draw;
 $("csv").onclick=()=>{const c=["Name,Matric,Score,Total,Date"].concat(r.map(x=>[x.name,x.matric,x.score,x.total,x.created_at].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(","))).join("\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([c],{type:"text/csv"}));a.download="ges104-results.csv";a.click()};
-fetch("/api/results",{headers:{"x-admin-password":pw}}).then(async x=>{if(!x.ok)throw 0;rows=await x.json();draw()}).catch(()=>{$("st").textContent="Wrong password or server error."})}
+fetch("/api/results",{headers:{"x-admin-password":pw}}).then(async x=>{if(!x.ok){const j=await x.json().catch(()=>({}));throw x.status+" "+(j.error||"")+" "+(j.detail||"")}rows=await x.json();draw()}).catch(e=>{$("st").textContent="Error: "+e})}
 home();
 </script></body></html>
